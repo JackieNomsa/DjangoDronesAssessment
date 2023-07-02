@@ -8,7 +8,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
 import re
+from datetime import datetime
 
+
+battery_tracking = []
 
 @api_view(['POST'])
 def register_drone(request):
@@ -26,7 +29,8 @@ def register_drone(request):
                 return JsonResponse({"status":"ERROR","message":"Drone above maximum weight limit (500gr)"})
             if serializer.validated_data['battery_capacity'] < 25:
                 serializer.validated_data['state'] = 'idle'
-                serializer.save()
+            create_history_log(serializer.validated_data['serial_number'],serializer.validated_data['battery_capacity'])
+            serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
     return JsonResponse({"status":"ERROR","message":"method not allowed"})
@@ -46,13 +50,12 @@ def load_medication_on_drone(request,serial_number):
         drone = Drone.objects.get(serial_number=serial_number)
         medication = Medication.objects.filter(serial_number=serial_number)
         current_weight = 0
-
+        create_history_log(drone.serial_number,drone.battery_capacity)
         for med in medication:
             current_weight+=med.weight
 
         medication_serializer = MedicationSerializer(data=request.data)
         if medication_serializer.is_valid():
-
             if validate_name(medication_serializer.validated_data['name']) and validate_code(medication_serializer.validated_data['code']):
                 if is_validate_weight(drone.weight,medication_serializer.validated_data['weight'],current_weight):
                     if drone.battery_capacity > 25:
@@ -80,6 +83,8 @@ def check_loaded_medication(request,serial_number):
     if request.method == 'GET':
         medication = Medication.objects.filter(serial_number=serial_number)
         serializer = MedicationSerializer(medication,many=True)
+        drone = Drone.objects.get(serial_number=serial_number)
+        create_history_log(drone.serial_number,drone.battery_capacity)
         return JsonResponse({"drone":serial_number,"medication":serializer.data},safe=False)
     return JsonResponse({"status":"ERROR","message":"method not allowed"})
     
@@ -113,7 +118,8 @@ def check_drone_battery_level(request,serial_number):
     if request.method == 'GET':
         try:
             drone = get_object_or_404(Drone,serial_number=serial_number)
-            return JsonResponse({"battery_level":drone.battery_capacity})
+            create_history_log(drone.serial_number,drone.battery_capacity)
+            return JsonResponse({"battery_level":drone.battery_capacity,"log":battery_tracking})
         except ObjectDoesNotExist:
             return JsonResponse({"message":"Drone does not exist"},status=status.HTTP_404_NOT_FOUND)
     return JsonResponse({"status":"ERROR","message":"method not allowed"})
@@ -157,3 +163,7 @@ def is_validate_weight(drone_weight,medication_weight,current_weight):
     except ValueError:
         return None
     return False
+
+def create_history_log(serial_number,battery_level):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    battery_tracking.append(serial_number,timestamp,battery_level)
