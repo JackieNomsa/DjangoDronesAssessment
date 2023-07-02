@@ -15,15 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from DjangoDronesAssessment import views
+from DjangoDronesAssessment.views import *
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('new_drone',views.register_drone),
-    path('load_medication', views.load_medication_on_drone),
-    path('check_medication', views.check_loaded_medication),
-    path('available_drones', views.check_available_drones),
-    path('drone_battery', views.check_drone_battery_level)
+    path('register_drone',register_drone,name='register_drone'),
+    path('load_medication/<str:serial_number>', load_medication_on_drone,name='load_medication'),
+    path('check_medication/<str:serial_number>', check_loaded_medication,name='check_loaded_medication'),
+    path('available_drones', check_available_drones,name='check_available_drones'),
+    path('drone_battery/<str:serial_number>', check_drone_battery_level,name='check_battery_level')
 
 ]
