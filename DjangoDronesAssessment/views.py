@@ -65,6 +65,7 @@ def load_medication_on_drone(request,serial_number):
                         return JsonResponse({"medication":medication_serializer.validated_data},safe=False)
                     return JsonResponse({"message":f"battery for drone {drone.serial_number} is too low for loading"})
                 return JsonResponse({"message":"medication too heavy"})
+            return JsonResponse({"message":"name and code is not valid"})
         return JsonResponse({"message":"Invalid data passed"}, status=status.HTTP_400_BAD_REQUEST,safe=False)
     except ObjectDoesNotExist:
         return JsonResponse({"message":f"Drone {serial_number} does not exist"},status=status.HTTP_404_NOT_FOUND)
@@ -166,4 +167,4 @@ def is_validate_weight(drone_weight,medication_weight,current_weight):
 
 def create_history_log(serial_number,battery_level):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    battery_tracking.append(serial_number,timestamp,battery_level)
+    battery_tracking.append((serial_number,timestamp,battery_level))

@@ -21,5 +21,5 @@ class Medication(models.Model):
     weight = models.IntegerField(validators=[MinValueValidator(0),
                                        MaxValueValidator(500)])
     code = models.CharField(max_length=50)
-    image = models.ImageField()
+    image = models.ImageField(upload_to = 'images')
     serial_number = models.CharField(max_length=100)
