@@ -54,7 +54,7 @@ def load_medication_on_drone(request,serial_number):
         for med in medication:
             current_weight+=med.weight
 
-        medication_serializer = MedicationSerializer(data=request.FILES)
+        medication_serializer = MedicationSerializer(data=request.data)
         if medication_serializer.is_valid():
             if validate_name(medication_serializer.validated_data['name']) and validate_code(medication_serializer.validated_data['code']):
                 if is_validate_weight(drone.weight,medication_serializer.validated_data['weight'],current_weight):
