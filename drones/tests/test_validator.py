@@ -41,12 +41,7 @@ class ValidatorTests(TestCase):
         result = self.validator.is_validate_weight("100", "20", "20")
         self.assertTrue(result)
 
-    # def test_create_history_log(self):
-    #     serial_number = "123"
-    #     battery_level = 80
-    #     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #     self.validator.create_history_log(serial_number, battery_level)
-    #     self.assertEqual(self.validator.battery_tracking, [(serial_number, timestamp, battery_level)])
+    
 
 if __name__ == '__main__':
     unittest.main()
