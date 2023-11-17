@@ -8,7 +8,7 @@ Check medication loaded on a specific Drone, Check the current battery level on 
 * Clone this repository [here](https://github.com/JackieNomsa/DjangoDronesAssessment).
 * Change into the assessment directory
 * Run pip install -r requirements.txt to install all dependancies
-* Run python3 manage.py test to ensure that the project is functional, all tests should pass
+* Run "python manage.py test drones.tests.test_drones drones.tests.test_validator" to ensure that the project is functional, all tests should pass
 ### Usage
   * Run python3 manage.py runserver on the terminal to start the applocation
   * navigate to http://127.0.0.1:8000/ using an api tool like postman

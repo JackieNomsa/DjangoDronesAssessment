@@ -46,5 +46,11 @@ class Validator:
         return False
 
     def create_history_log(self,serial_number,battery_level):
+        """used for tracking a drone's battery level and keeping timestamps
+
+        Args:
+            serial_number (str): to identify a specific drone
+            battery_level (int): indicates how much battery a drone has
+        """
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.battery_tracking.append((serial_number,timestamp,battery_level))

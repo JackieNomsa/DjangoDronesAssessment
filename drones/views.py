@@ -40,9 +40,19 @@ class Drones(APIView,Validator):
         
     
     def get(self, request, serial_number=None):
+        """used to get one specific drone or all available drones depending on the serial number
+
+        Args:
+            request (object): object containing data from a post request
+            serial_number (str, optional): sed as an identifier for a specific. Defaults to None.
+
+        Returns:
+            JsonResponse: if a serial number is specified it returns a specific drone.
+              Returns all available drones if there is no serial number
+        """
         if serial_number:
             try:
-                drone = Drone.objects.get(pk=serial_number)
+                drone = Drone.objects.get(serial_number=serial_number)
                 self.validator.create_history_log(drone.serial_number, drone.battery_capacity)
                 return JsonResponse({"battery_level": drone.battery_capacity, "log": "battery_tracking"})
             except ObjectDoesNotExist:
@@ -60,7 +70,7 @@ class MedicationView(APIView,Validator):
         """gets a drone using its serial number and loads the medication on it after all validations pass
         Args:
             request (object): object containing data from a post request
-            serial_number (string): used as an identifier for a specific
+            serial_number (string): used as an identifier for a specific drone
         Returns:
             JsonResponse: An HTTP response class that consumes data,serializes
             to JSON, and JSON data is returned
