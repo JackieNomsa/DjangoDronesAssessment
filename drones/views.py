@@ -42,7 +42,7 @@ class Drones(APIView,Validator):
     def get(self, request, serial_number=None):
         if serial_number:
             try:
-                drone = get_object_or_404(Drone, serial_number=serial_number)
+                drone = Drone.objects.get(pk=serial_number)
                 self.validator.create_history_log(drone.serial_number, drone.battery_capacity)
                 return JsonResponse({"battery_level": drone.battery_capacity, "log": "battery_tracking"})
             except ObjectDoesNotExist:
