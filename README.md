@@ -19,5 +19,5 @@ Check medication loaded on a specific Drone, Check the current battery level on 
 | GET        | /available_drones                   | To view all available drones                    |
 | GET        | /check_medication/{serial_number}   | To view all medication loaded on a drone        |
 | POST       | /load_medication/{serial_number}    | To load medication to drone using serial number |
-| GET        | /drone_battery/{serial_number}      | To add any new to check the current battery level                         |
+| GET        | /drone_battery/{serial_number}      | To check the current battery level                         |
 
