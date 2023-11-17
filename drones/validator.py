@@ -39,7 +39,7 @@ class Validator:
                     loaded medication weight added together with the new load weight
         """
         try:
-            if int(drone_weight)>=(int(medication_weight)+current_weight):
+            if int(drone_weight)>=(int(medication_weight)+int(current_weight)):
                 return True
         except ValueError:
             return None
