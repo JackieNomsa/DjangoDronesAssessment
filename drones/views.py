@@ -1,20 +1,12 @@
 from django.http import JsonResponse
 from .models import Drone, Medication
 from .serializers import DroneSerializer, MedicationSerializer
-from rest_framework.decorators import api_view
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
 from rest_framework.views import APIView
 from .validator import Validator
 
-import re
-from datetime import datetime
 
 class Drones(APIView,Validator):
     
@@ -44,7 +36,6 @@ class Drones(APIView,Validator):
             serializer.save()
             return JsonResponse(serializer.data,status=status.HTTP_201_CREATED)
         else:
-            print(serializer.is_valid())
             return JsonResponse({"message":"data is not valid","status":status.HTTP_400_BAD_REQUEST})
         
     

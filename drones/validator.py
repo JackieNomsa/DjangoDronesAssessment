@@ -26,6 +26,7 @@ class Validator:
         """
         return re.match('^[A-Z0-9_]+$',code)
 
+
     def is_validate_weight(self,drone_weight,medication_weight,current_weight):
         """validates if the new load being added does 
             not exceed the maximum weight specified for the robot
