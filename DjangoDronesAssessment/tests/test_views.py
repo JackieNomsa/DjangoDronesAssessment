@@ -33,6 +33,32 @@ class ViewsTests(TestCase):
         self.assertTrue(get_response.status_code,200)
 
 
+    def test_load_medication(self):
+        drone = {
+        "serial_number": "5678",
+        "model": "heavyweight",
+        "weight": 200,
+        "battery_capacity": 69,
+        "state": "idle"
+        }
+        post_response = self.client.post('/register_drone',data=drone)
+        image_data = b'Test image data'
+        encoded_image = base64.b64encode(image_data).decode('utf-8')
+        medication = {"name":"testing1",
+                "weight":80,
+                "code":"QWE7",
+                "serial_number":"5678",
+                }
+        image_data = base64.b64decode(encoded_image)
+        uploaded_image = SimpleUploadedFile("image.jpg", image_data)
+        data = medication.copy()
+        data["image"] = uploaded_image
+        response = self.client.post(reverse('load_medication', kwargs={'serial_number': "5678"}), data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("medication", response.json())
+    
+
+
     def test_check_medication(self):
         data = {
             "serial_number": "46ER",
